@@ -6,7 +6,10 @@
 .App .navbar-brand {
   #font-weight: bold;
   color: #fff;
+  #font-family: Pacifico, serif;
+  
 }
 .navbar-brand {
 	background-color: #5893D7;
+	font-size: 25px;
 }

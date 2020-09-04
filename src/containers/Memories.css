@@ -1,0 +1,8 @@
+.Memories form {
+  padding-bottom: 15px;
+}
+
+.Memories form textarea {
+  height: 300px;
+  font-size: 24px;
+}

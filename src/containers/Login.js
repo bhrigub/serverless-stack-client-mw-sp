@@ -5,6 +5,7 @@ import LoaderButton from "../components/LoaderButton";
 import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
+import Recaptcha from "react-recaptcha";
 import "./Login.css";
 
 export default function Login() {
@@ -14,16 +15,24 @@ export default function Login() {
     email: "",
     password: ""
   });
-
+  const {isBot}=useState(false);
+	
   function validateForm() {
-    return fields.email.length > 0 && fields.password.length > 0;
+    return fields.email.length > 0 && fields.password.length > 0 && isBot;	
   }
-
+	function verifyCallback(response){
+		if (response){
+			isBot(true);
+		}
+	}
+	function callbackFun(){
+		
+	}
   async function handleSubmit(event) {
     event.preventDefault();
-
+	
     setIsLoading(true);
-
+	
     try {
       await Auth.signIn(fields.email, fields.password);
       userHasAuthenticated(true);
@@ -62,6 +71,13 @@ export default function Login() {
         >
           Login
         </LoaderButton>
+		<Recaptcha
+			sitekey="6LeL7scZAAAAAKDot3OxylOqwIp-PVsiLSGzdlld"
+			render="explicit"
+			onloadCallback={callbackFun}
+			verifyCalback={verifyCallback}
+		  />
+		
       </form>
     </div>
   );

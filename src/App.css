@@ -26,3 +26,10 @@
 .Home .lander h1 {
 	color: #5893D7
 }
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #fff;
+}
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+    background-color: #095f94;
+}

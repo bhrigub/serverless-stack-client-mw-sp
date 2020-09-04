@@ -15,18 +15,20 @@ export default function Login() {
     email: "",
     password: ""
   });
-  const {isBot}=useState(false);
+  const [isBot]=useState(false);
 	
   function validateForm() {
     return fields.email.length > 0 && fields.password.length > 0 && isBot;	
   }
-	function verifyCallback(response){
+	var verifyCallback = function (response) {
+		console.log(response);
 		if (response){
-			isBot(true);
-		}
-	}
+		isBot(true);}
+		console.log(isBot);
+		validateForm();
+	};
 	function callbackFun(){
-		
+		console.log('Captcha Done');
 	}
   async function handleSubmit(event) {
     event.preventDefault();
@@ -72,10 +74,10 @@ export default function Login() {
           Login
         </LoaderButton>
 		<Recaptcha
-			sitekey="6LeL7scZAAAAAKDot3OxylOqwIp-PVsiLSGzdlld"
+			sitekey="6LfJ8McZAAAAAKosOVKpJj0Tl0C6k6YRugeiQVDb"
 			render="explicit"
-			onloadCallback={callbackFun}
-			verifyCalback={verifyCallback}
+			onloadCallback={callbackFun()}
+			verifyCallback={verifyCallback()}
 		  />
 		
       </form>

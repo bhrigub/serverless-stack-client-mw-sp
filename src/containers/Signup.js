@@ -12,6 +12,7 @@ import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
 import "./Signup.css";
 import { Auth } from "aws-amplify";
+import Recaptcha from "react-recaptcha";
 
 
 export default function Signup() {
@@ -25,7 +26,8 @@ export default function Signup() {
   const [newUser, setNewUser] = useState(null);
   const { userHasAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
-
+	const [isBot]=useState(false);
+	
   function validateForm() {
     return (
       fields.email.length > 0 &&
@@ -37,6 +39,16 @@ export default function Signup() {
   function validateConfirmationForm() {
     return fields.confirmationCode.length > 0;
   }
+  var verifyCallback = function (response) {
+		console.log(response);
+		if (response){
+		isBot(true);}
+		console.log(isBot);
+		validateForm();
+	};
+	function callbackFun(){
+		console.log('Captcha Done');
+	}
 
 	async function handleSubmit(event) {
 	  event.preventDefault();
@@ -136,6 +148,12 @@ export default function Signup() {
         >
           Signup
         </LoaderButton>
+		<Recaptcha
+			sitekey="6LfJ8McZAAAAAKosOVKpJj0Tl0C6k6YRugeiQVDb"
+			render="explicit"
+			onloadCallback={callbackFun()}
+			verifyCallback={verifyCallback()}
+		  />
       </form>
     );
   }

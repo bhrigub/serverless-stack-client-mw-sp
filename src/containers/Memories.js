@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { API, Storage } from "aws-amplify";
 import { onError } from "../libs/errorLib";
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { FormGroup, FormControl, ControlLabel, Button } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import config from "../config";
 import "./Memories.css";
@@ -118,6 +118,18 @@ async function handleDelete(event) {
   }
 }
 
+	function showPosition() {
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var positionInfo = "Your current position is (" + "Latitude: " + position.coords.latitude + ", " + "Longitude: " + position.coords.longitude + ")";
+				var currentContent = content + "\n" + positionInfo;				
+                setContent(currentContent);
+            });
+        } else {
+            alert("Sorry, your browser does not support HTML5 geolocation.");
+        }
+    }
+
 return (
   <div className="Memories">
     {note && (
@@ -143,6 +155,13 @@ return (
             </FormControl.Static>
           </FormGroup>
         )}
+		<Button 
+		  bsSize="large"
+		  bsStyle="primary"
+		  onClick={showPosition}
+		  >
+		  Click me to add your GPS location to your memory
+		  </Button>
         <FormGroup controlId="file">
           {!note.attachment && <ControlLabel>Attachment</ControlLabel>}
           <FormControl onChange={handleFileChange} type="file" />

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { FormGroup, FormControl, ControlLabel, Button } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import { onError } from "../libs/errorLib";
 import config from "../config";
@@ -14,7 +14,6 @@ export default function NewMemory() {
   const history = useHistory();
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   function validateForm() {
     return content.length > 0;
   }
@@ -53,9 +52,22 @@ export default function NewMemory() {
 		body: note
 	  });
 	}
+	
+	function showPosition() {
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var positionInfo = "Your current position is (" + "Latitude: " + position.coords.latitude + ", " + "Longitude: " + position.coords.longitude + ")";
+				var currentContent = content + "\n" + positionInfo;				
+                setContent(currentContent);
+            });
+        } else {
+            alert("Sorry, your browser does not support HTML5 geolocation.");
+        }
+    }
 
   return (
     <div className="NewMemory">
+	
       <form onSubmit={handleSubmit}>
         <FormGroup controlId="content">
           <FormControl
@@ -64,6 +76,13 @@ export default function NewMemory() {
             onChange={e => setContent(e.target.value)}
           />
         </FormGroup>
+		<Button 
+		  bsSize="large"
+		  bsStyle="primary"
+		  onClick={showPosition}
+		  >
+		  Click me to add your GPS location to your memory
+		  </Button>
         <FormGroup controlId="file">
           <ControlLabel>Attachment</ControlLabel>
           <FormControl onChange={handleFileChange} type="file" />
@@ -79,6 +98,7 @@ export default function NewMemory() {
           Create
         </LoaderButton>
       </form>
+	  
     </div>
   );
 }

@@ -12,7 +12,7 @@ import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
 import "./Signup.css";
 import { Auth } from "aws-amplify";
-import Recaptcha from "react-recaptcha";
+import ReCAPTCHA from 'react-google-recaptcha'
 
 
 export default function Signup() {
@@ -26,8 +26,8 @@ export default function Signup() {
   const [newUser, setNewUser] = useState(null);
   const { userHasAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
-	const [isBot]=useState(false);
-	
+  const recaptchaRef = React.createRef();
+  
   function validateForm() {
     return (
       fields.email.length > 0 &&
@@ -35,24 +35,22 @@ export default function Signup() {
       fields.password === fields.confirmPassword
     );
   }
+  
 
   function validateConfirmationForm() {
     return fields.confirmationCode.length > 0;
   }
-  var verifyCallback = function (response) {
-		console.log(response);
-		if (response){
-		isBot(true);}
-		console.log(isBot);
-		validateForm();
-	};
-	function callbackFun(){
-		console.log('Captcha Done');
-	}
 
 	async function handleSubmit(event) {
 	  event.preventDefault();
 
+	//recaptcha
+	const recaptchaValue = recaptchaRef.current.getValue();   
+    
+    if(!recaptchaValue.length) {
+        alert('Verify human existence using Recaptcha' )
+        return
+	}
 	  setIsLoading(true);
 
 	  try {
@@ -139,6 +137,10 @@ export default function Signup() {
             value={fields.confirmPassword}
           />
         </FormGroup>
+		<ReCAPTCHA
+			ref = {recaptchaRef}
+			sitekey = "6LfJ8McZAAAAAKosOVKpJj0Tl0C6k6YRugeiQVDb"
+		/>
         <LoaderButton
           block
           type="submit"
@@ -147,13 +149,7 @@ export default function Signup() {
           disabled={!validateForm()}
         >
           Signup
-        </LoaderButton>
-		<Recaptcha
-			sitekey="6LfJ8McZAAAAAKosOVKpJj0Tl0C6k6YRugeiQVDb"
-			render="explicit"
-			onloadCallback={callbackFun()}
-			verifyCallback={verifyCallback()}
-		  />
+        </LoaderButton>		
       </form>
     );
   }

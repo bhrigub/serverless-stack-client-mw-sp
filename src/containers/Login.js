@@ -5,8 +5,8 @@ import LoaderButton from "../components/LoaderButton";
 import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
-import Recaptcha from "react-recaptcha";
 import "./Login.css";
+import ReCAPTCHA from 'react-google-recaptcha'
 
 export default function Login() {
   const { userHasAuthenticated } = useAppContext();
@@ -15,12 +15,13 @@ export default function Login() {
     email: "",
     password: ""
   });
-  const [isBot]=useState(false);
+  const recaptchaRef = React.createRef();
+  //const [isBot]=useState(false);
 	
   function validateForm() {
-    return fields.email.length > 0 && fields.password.length > 0 && isBot;	
+    return fields.email.length > 0 && fields.password.length > 0;	
   }
-	var verifyCallback = function (response) {
+	/* var verifyCallback = function (response) {
 		console.log(response);
 		if (response){
 		isBot(true);}
@@ -29,12 +30,18 @@ export default function Login() {
 	};
 	function callbackFun(){
 		console.log('Captcha Done');
-	}
+	} */
   async function handleSubmit(event) {
     event.preventDefault();
-	
-    setIsLoading(true);
-	
+    
+	//recaptcha
+	const recaptchaValue = recaptchaRef.current.getValue();   
+    
+    if(!recaptchaValue.length) {
+        alert('Verify human existence using Recaptcha')
+        return
+	}
+	setIsLoading(true);
     try {
       await Auth.signIn(fields.email, fields.password);
       userHasAuthenticated(true);
@@ -64,6 +71,10 @@ export default function Login() {
             onChange={handleFieldChange}
           />
         </FormGroup>
+		<ReCAPTCHA
+			ref = {recaptchaRef}
+			sitekey = "6LfJ8McZAAAAAKosOVKpJj0Tl0C6k6YRugeiQVDb"
+		/>
         <LoaderButton
           block
           type="submit"
@@ -73,12 +84,7 @@ export default function Login() {
         >
           Login
         </LoaderButton>
-		<Recaptcha
-			sitekey="6LfJ8McZAAAAAKosOVKpJj0Tl0C6k6YRugeiQVDb"
-			render="explicit"
-			onloadCallback={callbackFun()}
-			verifyCallback={verifyCallback()}
-		  />
+		
 		
       </form>
     </div>

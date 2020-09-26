@@ -141,6 +141,13 @@ return (
             onChange={e => setContent(e.target.value)}
           />
         </FormGroup>
+		<Button 
+		  bsSize="large"
+		  bsStyle="primary"
+		  onClick={showPosition}
+		  >
+		  Click me to add your GPS location to your memory
+		  </Button>
         {note.attachment && (
           <FormGroup>
             <ControlLabel>Attachment</ControlLabel>
@@ -155,13 +162,7 @@ return (
             </FormControl.Static>
           </FormGroup>
         )}
-		<Button 
-		  bsSize="large"
-		  bsStyle="primary"
-		  onClick={showPosition}
-		  >
-		  Click me to add your GPS location to your memory
-		  </Button>
+		
         <FormGroup controlId="file">
           {!note.attachment && <ControlLabel>Attachment</ControlLabel>}
           <FormControl onChange={handleFileChange} type="file" />

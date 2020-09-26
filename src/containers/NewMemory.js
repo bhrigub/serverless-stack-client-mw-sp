@@ -56,7 +56,7 @@ export default function NewMemory() {
 	function showPosition() {
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                var positionInfo = "Your current position is (" + "Latitude: " + position.coords.latitude + ", " + "Longitude: " + position.coords.longitude + ")";
+                var positionInfo = `Your current position is (Latitude: ${position.coords.latitude} , Longitude: ${position.coords.longitude} )`;
 				var currentContent = content + "\n" + positionInfo;				
                 setContent(currentContent);
             });
